@@ -1,3 +1,6 @@
+// 使用模拟数据
+export const isSimulateData = true
+
 // 请求的路径,若不设置则根据环境来配置(process.env.BASE_API)
 export const baseUrl = 'http://localhost:3000'
 

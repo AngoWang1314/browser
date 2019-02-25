@@ -1,4 +1,6 @@
 import { getInitData } from '@/api/init'
+import { isSimulateData } from '@/config/api'
+import mock from '@/config/mock'
 const init = {
   state: {
     sexes: [],
@@ -38,12 +40,16 @@ const init = {
   actions: {
     getInitData ({commit}) {
       return new Promise((resolve, reject) => {
-        getInitData().then((response) => {
-          commit('SET_INIT_DATA', response)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        if (isSimulateData) {
+          commit('SET_INIT_DATA', mock.getInitData)
+        } else {
+          getInitData().then((response) => {
+            commit('SET_INIT_DATA', response)
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     }
   }

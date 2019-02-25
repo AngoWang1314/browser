@@ -1,9 +1,8 @@
-# frontend
+# vue-backstage
 
-> 一个基于[vue](https://github.com/vuejs/vue) 和 [elementUI](https://github.com/ElemeFE/element)的管理后台，配合基于Nodejs的Express框架开发的后台，以MongoDB为数据库进行API开发。
+> 一个基于[vue](https://github.com/vuejs/vue) 和 [elementUI](https://github.com/ElemeFE/element)的管理后台。
 
 ## 依赖包
-
 #### 安装[elementUI](http://element-cn.eleme.io/#/zh-CN)
 ```bash
 npm install element-ui -S
@@ -63,3 +62,10 @@ npm i --save lodash
 npm i vue-i18n
 ```
 ## 路由搭建
+* 登录页 - /login
+* 主页 - /home
+* 个人中心 - /userCenter
+* 用户列表 - /userManage
+* 角色列表 - /roleManage
+* 权限列表 - /authManage
+## 数据模拟&API接入

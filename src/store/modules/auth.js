@@ -1,4 +1,6 @@
 import { getAuthList, getParentAuth, createAuth, deleteAuth, getDetail, saveEditAuth, getAllAuth } from '@/api/auth'
+import { isSimulateData } from '@/config/api'
+import mock from '@/config/mock'
 const auth = {
   state: {
     authList: [],
@@ -23,98 +25,16 @@ const auth = {
   actions: {
     getAuthList ({commit}, params) {
       return new Promise((resolve, reject) => {
-        commit('SET_AUTH_LIST', {
-          rows: [
-            {
-              authSign: 'system:home:view',
-              authType: 'menu',
-              id: '5c3c54f286885e2788b43fd2',
-              isDisplay: true,
-              location: '#/home/index',
-              name: '主页',
-              remark: '均有权限'
-            },
-            {
-              authSign: 'system:userManage:view',
-              authType: 'menu',
-              id: '5c3da5d2671ac11a741d56b6',
-              isDisplay: true,
-              location: '#/userManage/index',
-              name: '用户管理'
-            },
-            {
-              authSign: 'system:roleManage:view',
-              authType: 'menu',
-              id: '5c3da64a671ac11a741d56b7',
-              isDisplay: true,
-              location: '#/roleManage/index',
-              name: '角色管理'
-            },
-            {
-              authSign: 'system:authManage:index',
-              authType: 'menu',
-              id: '5c3da85c671ac11a741d56b8',
-              isDisplay: true,
-              location: '#/authManage/index',
-              name: '权限管理'
-            },
-            {
-              authSign: 'system:userManage:create',
-              authType: 'button',
-              id: '5c3dac40671ac11a741d56b9',
-              isDisplay: true,
-              location: '#/userManage/create',
-              name: '新建用户'
-            },
-            {
-              authSign: 'system:userManage:edit',
-              authType: 'button',
-              id: '5c3e8ea2aa6d031f90bfcf43',
-              isDisplay: true,
-              location: '#/userManage/edit',
-              name: '编辑用户'
-            },
-            {
-              authSign: 'system:userManage:resetPwd',
-              authType: 'button',
-              id: '5c3e91dcaa6d031f90bfcf45',
-              isDisplay: true,
-              location: '#/userManage/index',
-              name: '重置密码'
-            },
-            {
-              authSign: 'system:userManage:index',
-              authType: 'button',
-              id: '5c3e9340aa6d031f90bfcf46',
-              isDisplay: true,
-              location: '#/userManage/index',
-              name: '停用用户'
-            },
-            {
-              authSign: 'system:userManage:prohibite',
-              authType: 'button',
-              id: '5c3e966caa6d031f90bfcf47',
-              isDisplay: true,
-              location: '#/userManage/index',
-              name: '禁用账号'
-            },
-            {
-              authSign: 'system:roleManage:create',
-              authType: 'button',
-              id: '5c3e96cbaa6d031f90bfcf48',
-              isDisplay: true,
-              location: '#/roleManage/create',
-              name: '新建角色'
-            }
-          ],
-          totalCount: 12
-        })
-        // getAuthList(params).then(response => {
-        //   commit('SET_AUTH_LIST', response)
-        //   resolve(response)
-        // }).catch(error => {
-        //   reject(error)
-        // })
+        if (isSimulateData)  {
+          commit('SET_AUTH_LIST', mock.getAuthList)
+        } else {
+          getAuthList(params).then(response => {
+            commit('SET_AUTH_LIST', response)
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     getAllAuth ({commit}, params) {
@@ -128,12 +48,16 @@ const auth = {
     },
     getParentAuth ({commit}) {
       return new Promise((resolve, reject) => {
-        getParentAuth().then(response => {
-          commit('SET_PARENT_AUTH', response)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        if (isSimulateData) {
+          commit('SET_PARENT_AUTH', mock.getParentAuth)
+        } else {
+          getParentAuth().then(response => {
+            commit('SET_PARENT_AUTH', response)
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     createAuth ({commit}, params) {

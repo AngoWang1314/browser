@@ -1,4 +1,6 @@
 import { getUserList, createUser, getUserDetail, updateUser, prohibiteUser, unusableUser, normalUser, resetPwd } from '@/api/user'
+import { isSimulateData } from '@/config/api'
+import mock from '@/config/mock'
 const user = {
   state: {
     userList: [],
@@ -13,42 +15,16 @@ const user = {
   actions: {
     getUserList ({commit}, params) {
       return new Promise((resolve, reject) => {
-        commit('SET_USER_LIST', {
-          rows: [
-            {
-              email: '1010136336@qq.com',
-              id: '5c3858c135f2bf29984dc868',
-              mobile: '13560472222',
-              remark: '',
-              sex: 'male',
-              status: 'unusable',
-              username: '刘灿融'
-            }, {
-              email: '13560475555@qq.com',
-              id: '5c4690fbcc000b261c1c13d4',
-              mobile: '13560475555',
-              remark: '',
-              sex: 'male',
-              status: 'normal',
-              username: 'aa'
-            }, {
-              email: '13560475556@qq.com',
-              id: '5c46b697f591e01648886102',
-              mobile: '13560475556',
-              remark: '',
-              sex: 'female',
-              status: 'normal',
-              username: 'aa'
-            }
-          ],
-          totalCount: 3
-        })
-        // getUserList(params).then(response => {
-        //   commit('SET_USER_LIST', response)
-        //   resolve(response)
-        // }).catch(error => {
-        //   reject(error)
-        // })
+        if (isSimulateData) {
+          commit('SET_USER_LIST', mock.getUserList)
+        } else {
+          getUserList(params).then(response => {
+            commit('SET_USER_LIST', response)
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     createUser ({commit}, params) {
