@@ -29,11 +29,19 @@ const user = {
     },
     createUser ({commit}, params) {
       return new Promise((resolve, reject) => {
-        createUser(params).then(response => {
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        if (isSimulateData) {
+          console.log(params);
+          // state.userList.push({});
+          resolve({
+            msg: '新建成功'
+          })
+        }else {
+          createUser(params).then(response => {
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
     getUserDetail ({commit}, params) {
