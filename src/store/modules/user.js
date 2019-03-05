@@ -1,6 +1,6 @@
 import { getUserList, createUser, getUserDetail, updateUser, prohibiteUser, unusableUser, normalUser, resetPwd } from '@/api/user'
 import { isSimulateData } from '@/config/api'
-import mock from '@/config/mock'
+
 const user = {
   state: {
     userList: [],
@@ -15,27 +15,22 @@ const user = {
   actions: {
     getUserList ({commit}, params) {
       return new Promise((resolve, reject) => {
-        if (isSimulateData) {
-          commit('SET_USER_LIST', mock.getUserList)
-        } else {
-          getUserList(params).then(response => {
-            commit('SET_USER_LIST', response)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
-        }
+        getUserList(params).then(response => {
+          commit('SET_USER_LIST', response)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
     createUser ({commit}, params) {
       return new Promise((resolve, reject) => {
         if (isSimulateData) {
-          console.log(params);
           // state.userList.push({});
           resolve({
             msg: '新建成功'
           })
-        }else {
+        } else {
           createUser(params).then(response => {
             resolve(response)
           }).catch(error => {
