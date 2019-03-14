@@ -1,6 +1,4 @@
 import { createRole, getRoleList, deleteRole, getRoleDetail, updateRole, getRoleAuth, configAuth } from '@/api/role'
-import { isSimulateData } from '@/config/api'
-import mock from '@/config/mock'
 const role = {
   state: {
     roleList: [],
@@ -24,16 +22,12 @@ const role = {
     },
     getRoleList ({commit}, params) {
       return new Promise((resolve, reject) => {
-        if (isSimulateData) {
-          commit('SET_ROLE_LIST', mock.getRoleList)
-        } else {
-          getRoleList(params).then((response) => {
-            commit('SET_ROLE_LIST', response)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
-        }
+        getRoleList(params).then((response) => {
+          commit('SET_ROLE_LIST', response)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
     deleteRole ({commit}, params) {

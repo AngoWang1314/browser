@@ -68,4 +68,26 @@ npm i vue-i18n
 * 用户列表 - /userManage
 * 角色列表 - /roleManage
 * 权限列表 - /authManage
+
 ## 数据模拟&API接入
+* 安装Mock.js
+```bash
+npm install mockjs --save-dev
+```
+* mock/*.js编写模拟数据
+* mock/index.js拦截请求，返回对应模拟数据
+
+## 前端跨域问题
+`config/index.js`中`proxyTable`添加代理配置
+```javascript
+proxyTable: {
+    '/v1': {
+        target: 'http://192.168.0.107:3000',
+        changeOrigin: true, // 允许跨域
+        pathRewrite:{
+            '^/v1':'/v1'
+        }
+    }
+}
+```
+配置后，axios就不需再设置baseURL了
