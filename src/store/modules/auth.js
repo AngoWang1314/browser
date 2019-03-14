@@ -1,6 +1,4 @@
 import { getAuthList, getParentAuth, createAuth, deleteAuth, getDetail, saveEditAuth, getAllAuth } from '@/api/auth'
-import { isSimulateData } from '@/config/api'
-import mock from '@/config/mock'
 const auth = {
   state: {
     authList: [],
@@ -25,16 +23,12 @@ const auth = {
   actions: {
     getAuthList ({commit}, params) {
       return new Promise((resolve, reject) => {
-        if (isSimulateData)  {
-          commit('SET_AUTH_LIST', mock.getAuthList)
-        } else {
-          getAuthList(params).then(response => {
-            commit('SET_AUTH_LIST', response)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
-        }
+        getAuthList(params).then(response => {
+          commit('SET_AUTH_LIST', response)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
     getAllAuth ({commit}, params) {
@@ -48,16 +42,12 @@ const auth = {
     },
     getParentAuth ({commit}) {
       return new Promise((resolve, reject) => {
-        if (isSimulateData) {
-          commit('SET_PARENT_AUTH', mock.getParentAuth)
-        } else {
-          getParentAuth().then(response => {
-            commit('SET_PARENT_AUTH', response)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
-        }
+        getParentAuth().then(response => {
+          commit('SET_PARENT_AUTH', response)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
     createAuth ({commit}, params) {

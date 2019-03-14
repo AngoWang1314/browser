@@ -5,6 +5,7 @@ import 'babel-polyfill'
 import VueI18n from 'vue-i18n'
 import LangEn from '@/lang/en'
 import LangCn from '@/lang/cn'
+import '@/mock/index'
 
 // 引入element-ui
 import elementUI from 'element-ui'
