@@ -63,6 +63,8 @@ npm i vue-i18n
 ```
 ## 路由搭建
 * 登录页 - /login
+* 找回密码页 - /forgetPwd
+* 注册页 - /register
 * 主页 - /home
 * 个人中心 - /userCenter
 * 用户列表 - /userManage

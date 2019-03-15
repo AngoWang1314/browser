@@ -19,6 +19,18 @@ const staticRoutes = [
     hidden: true
   },
   {
+    path: '/findPwd',
+    name: 'findPwd',
+    component: resolve => require(['@/views/findPwd/index.vue'], resolve),
+    hidden: true
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: resolve => require(['@/views/register/index.vue'], resolve),
+    hidden: true
+  },
+  {
     path: '/home',
     redirect: '/home/index',
     component: Layout,
@@ -40,7 +52,7 @@ const router = new Router({
   routes: staticRoutes
 })
 
-const whiteList = ['/login']
+const whiteList = ['/login', '/register', '/findPwd']
 function hasPermission (to) {
   let arr = []
   store.getters.routes.forEach(item => {

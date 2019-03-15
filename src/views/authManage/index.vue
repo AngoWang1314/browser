@@ -141,5 +141,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../../styles/less/base.less';
+@import '../../styles/less/main.less';
 </style>
