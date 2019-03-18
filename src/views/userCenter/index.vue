@@ -2,9 +2,17 @@
   <div class="user-center-wrapper">
     <div class="main">
       <div class="user-portrait">
-        <img src="http://temp.im/110x110" alt="">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <div class="modify-portrait">
-          <el-button type="primary">修改头像</el-button>
+          <el-upload
+            class="avatar-uploader"
+            action=""
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :file-list="fileList">
+            <el-button type="primary">修改头像</el-button>
+          </el-upload>
         </div>
       </div>
       <div class="user-info">
@@ -68,12 +76,30 @@ export default {
         sex: 'male',
         createdAt: '2019-01-03',
         remark: ''
-      }
+      },
+      imageUrl: 'http://temp.im/110x110',
+      fileList: []
     }
   },
   methods: {
     modifyPwd () {
       this.$router.push({path: '/userCenter/pwd'})
+    },
+    handleAvatarSuccess (res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+
+      return isJPG && isLt2M
     }
   }
 }
