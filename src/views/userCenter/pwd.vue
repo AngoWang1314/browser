@@ -15,6 +15,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary">确定修改</el-button>
+            <el-button type="info" @click="cancelAndBack()">取消并返回</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -30,6 +31,11 @@ export default {
         newPwd: '',
         confirmPwd: ''
       }
+    }
+  },
+  methods: {
+    cancelAndBack () {
+      this.$router.push({path: '/userCenter/index'})
     }
   }
 }
