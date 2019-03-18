@@ -77,7 +77,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../../styles/less/base.less';
+@import '../../styles/less/main.less';
 .el-form-item {
   text-align: right;
   border-bottom: 1px solid #ebeef5;
