@@ -91,7 +91,7 @@ export default {
     }
     return {
       form: {
-        mobile: '13560472267',
+        mobile: '',
         code: ''
       },
       pwdForm: {

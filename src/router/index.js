@@ -6,6 +6,7 @@ import { getToken } from '@/utils/token'
 
 Vue.use(Router)
 
+// 路由
 const staticRoutes = [
   {
     path: '/',
@@ -52,6 +53,7 @@ const router = new Router({
   routes: staticRoutes
 })
 
+// 白名单：无需合法token可进入
 const whiteList = ['/login', '/register', '/findPwd']
 function hasPermission (to) {
   let arr = []
