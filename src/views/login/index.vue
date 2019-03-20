@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     codeChange (val) {
-      console.log(`parents:${val}`)
+      console.log(`验证码：${val}`)
       this.code = val
     },
     login () {

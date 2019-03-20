@@ -2,7 +2,8 @@
 export const isSimulateData = true
 
 // 请求的路径(proxyTable已经进行代理，dev就不需要设置)
-export const baseUrl = process.env.NODE_ENV === 'production' ? process.env.BASE_API : ''
+export const baseUrl = ((process.env.NODE_ENV === 'production') && (location.host !== 'localhost')) ? process.env.BASE_API : ''
+console.log(((process.env.NODE_ENV === 'production') && (location.host !== 'localhost')))
 
 // 超时时间设置
 export const serviceTimeout = 5000
