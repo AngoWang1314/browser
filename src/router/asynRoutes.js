@@ -1,5 +1,6 @@
 import Layout from '@/views/layout/Layout'
 
+// 异步路由
 const asynRoutesMap = {
   userCenter: {
     path: '/userCenter',
