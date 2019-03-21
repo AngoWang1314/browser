@@ -12,6 +12,11 @@ export default {
 </script>
 
 <style>
+  body {
+    background-image: url('assets/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
   html, body, #app {
     position: relative;
     width: 100%;
