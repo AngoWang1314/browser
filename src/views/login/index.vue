@@ -175,7 +175,7 @@ export default {
       display: inline-block;
       padding: 0 5px;
       cursor: pointer;
-      color: #0079FE;
+      color: @mainColor;
       &:hover {
         text-decoration: underline;
       }
