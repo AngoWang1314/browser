@@ -1,27 +1,26 @@
 import { Loading } from 'element-ui'
 
 const base = {
+  namespaced: true,
   state: {
     loadingInstance: '',
     isCollapseMenu: false,
     language: 'cn'
   },
+  getters: {
+    isCollapseMenu: state => state.isCollapseMenu,
+    language: state => state.language
+  },
   mutations: {
-    SHOW_LOADING (state, options) {
-      if (!options) options = {}
-
+    SHOW_LOADING (state, options = {}) {
       const defaultOptions = {
         lock: true,
-        text: 'Loading',
+        text: '加载中',
         spinner: '',
         background: 'rgba(0, 0, 0, 0.7)'
       }
 
-      for (const k in defaultOptions) {
-        if (defaultOptions.hasOwnProperty(k)) {
-          options[k] = options[k] || defaultOptions[k]
-        }
-      }
+      options = {...options, ...defaultOptions}
 
       // 全屏 Loading 不会创建多个实例
       options.fullscreen = true

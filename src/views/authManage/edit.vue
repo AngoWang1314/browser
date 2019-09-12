@@ -77,15 +77,18 @@ export default {
     this.getDetail()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('init', [
       'authTypes',
       'displayModes',
+      'parentAuths'
+    ]),
+    ...mapGetters('auth', [
       'parentAuths'
     ])
   },
   methods: {
     getDetail () {
-      this.$store.dispatch('getDetail', {
+      this.$store.dispatch('auth/getDetail', {
         id: this.authId
       }).then((data) => {
         this.form = data
@@ -93,15 +96,15 @@ export default {
     },
     getInitData () {
       if (!this.authTypes.length) {
-        this.$store.dispatch('getInitData')
+        this.$store.dispatch('init/getInitData')
       }
       if (!this.parentAuths.length) {
-        this.$store.dispatch('getParentAuth')
+        this.$store.dispatch('auth/getParentAuth')
       }
     },
     saveEdit () {
       this.form.id = this.authId
-      this.$store.dispatch('saveEditAuth', this.form).then(rs => {
+      this.$store.dispatch('auth/saveEditAuth', this.form).then(rs => {
         this.$router.push({path: '/authManage/index'})
       })
     },

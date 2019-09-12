@@ -45,26 +45,28 @@ export default {
   },
   created () {
     if (!this.authTypes.length) {
-      this.$store.dispatch('getInitData')
+      this.$store.dispatch('init/getInitData')
     }
     if (!this.parentAuths.length) {
-      this.$store.dispatch('getParentAuth')
+      this.$store.dispatch('auth/getParentAuth')
     }
     this.authId = this.$route.params.authId
     this.getDetail()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('init', [
       'authTypes',
       'authTypeMap',
-      'displayModeMap',
+      'displayModeMap'
+    ]),
+    ...mapGetters('auth', [
       'parentAuths',
       'parentAuthMap'
     ])
   },
   methods: {
     getDetail () {
-      this.$store.dispatch('getDetail', {
+      this.$store.dispatch('auth/getDetail', {
         id: this.authId
       }).then((data) => {
         this.form = data

@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     getInitData () {
-      this.$store.dispatch('getRoleDetail', {
+      this.$store.dispatch('role/getRoleDetail', {
         id: this.roleId
       }).then(data => {
         this.form = data
@@ -106,7 +106,7 @@ export default {
         this.cancelAndBack()
       } else {
         this.form.id = this.roleId
-        this.$store.dispatch('updateRole', this.form).then(data => {
+        this.$store.dispatch('role/updateRole', this.form).then(data => {
           this.cancelAndBack()
         })
       }

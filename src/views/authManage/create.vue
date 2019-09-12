@@ -83,19 +83,21 @@ export default {
     // this.getInitData()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('init', [
       'authTypes',
-      'displayModes',
+      'displayModes'
+    ]),
+    ...mapGetters('auth', [
       'parentAuths'
     ])
   },
   methods: {
     // getInitData () {
-    //   this.$store.dispatch('getInitData')
-    //   this.$store.dispatch('getParentAuth')
+    //   this.$store.dispatch('init/getInitData')
+    //   this.$store.dispatch('auth/getParentAuth')
     // },
     createAuth () {
-      this.$store.dispatch('createAuth', this.form).then(rs => {
+      this.$store.dispatch('auth/createAuth', this.form).then(rs => {
         this.$router.push({path: '/authManage/index'})
       })
     },

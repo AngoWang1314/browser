@@ -3,10 +3,16 @@ import { isSimulateData } from '@/config/api'
 import { getToken, setToken, removeToken } from '@/utils/token'
 
 const user = {
+  namespaced: true,
   state: {
     token: getToken(),
     userList: [],
     userTotalCount: 0
+  },
+  getters: {
+    token: state => state.token,
+    userList: state => state.userList,
+    userTotalCount: state => state.userTotalCount
   },
   mutations: {
     SET_USER_LIST (state, result) {

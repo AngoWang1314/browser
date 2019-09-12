@@ -177,7 +177,7 @@ npm i vue-i18n
    component: resolve => require(['@/views/login/index.vue'], resolve)
    ```
 
-   
+
 
 2. router实例在`main.js`中注入
 
@@ -192,16 +192,16 @@ npm i vue-i18n
    })
    ```
 
-   
+
 
 3. `router/asynRouters`定义异步路由列表
 
    ```javascript
    // router/index.js中添加添加异步路由
-   router.addRoutes(store.getters.asynRoutes)
+   router.addRoutes(store.getters['init/asynRoutes'])
    ```
 
-   
+
 
 ### 数据模拟&API接入
 
@@ -240,7 +240,7 @@ const initData = () => {
 ```javascript
 proxyTable: {
     '/v1': {
-        target: 'http://192.168.0.107:3000',
+        target: 'http://localhost:3000',
         changeOrigin: true, // 允许跨域
         pathRewrite:{
             '^/v1':'/v1'

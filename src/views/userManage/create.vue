@@ -21,7 +21,10 @@
           </el-form-item>
           <el-form-item label="角色" prop="roleIds">
             <el-checkbox-group v-model="form.roleIds">
-              <el-checkbox v-for="(role, id) in roleList" v-bind:key="id" :label="role.id" name="roleIds">{{role.name}}</el-checkbox>
+              <el-checkbox
+                v-for="role in roleList"
+                :key="role.id"
+                :label="role.id">{{role.name}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="备注">
@@ -100,19 +103,19 @@ export default {
     this.getRoleList()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('role', [
       'roleList'
     ])
   },
   methods: {
     getRoleList () {
-      this.$store.dispatch('getRoleList', {})
+      this.$store.dispatch('role/getRoleList', {})
     },
     createUser () {
       return new Promise((resolve, reject) => {
         this.$refs.form.validate(valid => {
           if (valid) {
-            this.$store.dispatch('createUser', this.form).then(() => {
+            this.$store.dispatch('user/createUser', this.form).then(() => {
               this.cancelAndBack()
             })
           }

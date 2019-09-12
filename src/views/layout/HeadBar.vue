@@ -41,10 +41,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'user',
+    ...mapGetters('base', [
       'isCollapseMenu',
       'language'
+    ]),
+    ...mapGetters('init', [
+      'user'
     ]),
     collapseMenuSvg () {
       return this.isCollapseMenu ? 'to-right' : 'to-left'
@@ -55,14 +57,14 @@ export default {
   },
   methods: {
     toggleCollapseMenu () {
-      this.$store.commit('TOGGLE_COLLAPSE_MENU')
+      this.$store.commit('base/TOGGLE_COLLAPSE_MENU')
     },
     toggleLanguage () {
-      this.$store.commit('TOGGLE_LANGUAGE')
+      this.$store.commit('base/TOGGLE_LANGUAGE')
       this.$i18n.locale = this.language
     },
     logout () {
-      this.$store.dispatch('logout').then(() => {
+      this.$store.dispatch('user/logout').then(() => {
         this.$router.push({name: 'login'})
       })
     }

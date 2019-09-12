@@ -8,8 +8,8 @@ import LangCn from '@/lang/cn'
 import '@/mock/index'
 
 // 引入element-ui
-import elementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/plugins/element'
+
 // 样式重置
 import 'normalize.css/normalize.css'
 import '@/styles/tool.css'
@@ -28,7 +28,6 @@ import router from '@/router'
 import store from '@/store'
 
 Vue.use(VueI18n)
-Vue.use(elementUI, {size: 'mini'})
 Vue.config.productionTip = false
 
 const i18n = {

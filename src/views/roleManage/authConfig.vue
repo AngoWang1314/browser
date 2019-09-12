@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getAllAuth () {
-      this.$store.dispatch('getAllAuth').then(data => {
+      this.$store.dispatch('auth/getAllAuth').then(data => {
         console.log(data)
         if (data.length) {
           let parentAuths = []
@@ -68,7 +68,7 @@ export default {
       })
     },
     getRoleAuth () {
-      return this.$store.dispatch('getRoleAuth', {
+      return this.$store.dispatch('role/getRoleAuth', {
         roleId: this.roleId
       }).then(rs => {
         for (let i = 0; i < rs.length; i++) {
@@ -95,7 +95,7 @@ export default {
             }
           }
         }
-        this.$store.dispatch('configAuth', {
+        this.$store.dispatch('role/configAuth', {
           id: this.roleId,
           authIds: array
         }).then(data => {

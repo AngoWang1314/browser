@@ -9,7 +9,6 @@ import {
   retStatusCodeKey,
   retDataKey,
   retMsgKey,
-  redirectURLKey,
   successStatusCodeValue,
   redirectStatusCodeValue
 } from '@/config/api'
@@ -25,7 +24,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (!config.isHideLoading) {
-      store.commit('SHOW_LOADING', {
+      store.commit('base/SHOW_LOADING', {
         loadingText: '努力加载数据中...',
         loadingSpinner: '',
         loadingBackground: 'rgba(0, 0, 0, 0.8)'
@@ -39,7 +38,7 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    store.commit('HIDE_LOADING')
+    store.commit('base/HIDE_LOADING')
     Promise.reject(error)
   }
 )
@@ -47,22 +46,22 @@ service.interceptors.request.use(
 // response拦截器
 service.interceptors.response.use(
   response => {
-    store.commit('HIDE_LOADING')
+    store.commit('base/HIDE_LOADING')
     const res = response[retDataKey]
     if (res[retStatusCodeKey] === successStatusCodeValue) {
-      return res[retDataKey]
+      return Promise.resolve(res[retDataKey])
     } else if (res[retStatusCodeKey] === redirectStatusCodeValue) {
-      let _Message = Message({
+      Message({
         message: res[retMsgKey],
         type: 'error',
-        duration: 2 * 1000
+        duration: 2000,
+        onClose () {
+          // res[retDataKey][redirectURLKey] && (location.href = res[retDataKey][redirectURLKey])
+          router.push('/login')
+        }
       })
-      _Message.onClose = () => {
-        res[redirectURLKey] && (location.href = res[redirectURLKey])
-        router.push('/login')
-      }
     } else {
-      Message({
+      !response.config.isHideMessage && Message({
         message: res[retMsgKey],
         type: 'error',
         duration: 2 * 1000
@@ -71,22 +70,27 @@ service.interceptors.response.use(
     }
   },
   error => {
-    store.commit('HIDE_LOADING')
-    let errorMsgMap = {
-      504: '服务器错误'
+    store.commit('base/HIDE_LOADING')
+    let statusCode = error.response && error.response.status
+    let msg = ''
+    if (statusCode && typeof statusCode === 'number') {
+      if (statusCode > 500) {
+        msg = '服务器错误'
+      } else if (statusCode > 400) {
+        msg = '客户端错误'
+      }
+    } else {
+      msg = error
     }
-    let _Message
-    if (!_Message) {
-      _Message = Message({
-        message: errorMsgMap[error.response.status],
-        type: 'error',
-        duration: 2 * 1000
-      })
-      _Message.onClose = () => {
+    Message({
+      message: msg,
+      type: 'error',
+      duration: 2 * 1000,
+      onClose  () {
         router.push('/login')
       }
-      return Promise.reject(error.response.data)
-    }
+    })
+    return Promise.reject(error.response ? error.response.data : error)
   }
 )
 export default service

@@ -65,9 +65,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'routes',
+    ...mapGetters('base', [
       'isCollapseMenu'
+    ]),
+    ...mapGetters('init', [
+      'routes'
     ]),
     _routes () {
       let arr = []

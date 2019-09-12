@@ -207,7 +207,7 @@ export default {
         if (valid) {
           self.flag.isLogin = true
           self.loginTimer = setTimeout(function () {
-            self.$store.dispatch('login', {
+            self.$store.dispatch('user/login', {
               username: self.form.mobile,
               password: self.pwdForm.newPwd
             }).then(() => {

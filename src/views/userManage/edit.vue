@@ -3,29 +3,32 @@
     <div class="main">
       <div class="title">编辑用户</div>
       <div class="form">
-        <el-form ref="form" :model="form" :rules="formRules" label-width="100px" size="small">
+        <el-form ref="userForm" :model="userForm" :rules="formRules" label-width="100px" size="small">
           <el-form-item label="用户名">
-              <el-input v-model="form.username" :disabled="true"></el-input>
+              <el-input v-model="userForm.username" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="手机号">
-              <el-input v-model="form.mobile" :disabled="true"></el-input>
+              <el-input v-model="userForm.mobile" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="电子邮箱" prop="email">
-              <el-input v-model="form.email"></el-input>
+              <el-input v-model="userForm.email"></el-input>
           </el-form-item>
           <el-form-item label="性别">
-            <el-radio-group v-model="form.sex">
+            <el-radio-group v-model="userForm.sex">
               <el-radio-button label="male">男</el-radio-button>
               <el-radio-button label="female">女</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="角色" prop="roleIds">
-            <el-checkbox-group v-model="form.roleIds">
-              <el-checkbox v-for="(role, idx) in roleList" v-bind:key="idx" :label="role.id" name="roleIds">{{role.name}}</el-checkbox>
+            <el-checkbox-group v-model="userForm.roleIds">
+              <el-checkbox
+                v-for="role in roleList"
+                :key="role.id"
+                :label="role.id">{{role.name}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="状态">
-              <el-tag :type="typeMap[form.status]" size="medium">{{ statusMap[form.status] }}</el-tag>
+              <el-tag :type="typeMap[userForm.status]" size="medium">{{ statusMap[userForm.status] }}</el-tag>
           </el-form-item>
           <el-form-item label="注册时间">
             <el-input v-model="createdAt" :disabled="true"></el-input>
@@ -38,7 +41,7 @@
               type="textarea"
               :rows="2"
               placeholder="请输入内容"
-              v-model="form.remark"
+              v-model="userForm.remark"
               :autosize="{ minRows: 2, maxRows: 4}"
               resize="none">
             </el-input>
@@ -68,14 +71,15 @@ export default {
       }
     }
     return {
-      form: {
+      userForm: {
         username: '',
         mobile: '',
         email: '',
         sex: '',
         createdAt: '',
         updatedAt: '',
-        remark: ''
+        remark: '',
+        roleIds: []
       },
       initString: '',
       typeMap: {
@@ -97,35 +101,37 @@ export default {
     this.getUserDetail()
   },
   computed: {
-    ...mapGetters([
-      'roleList',
+    ...mapGetters('role', [
+      'roleList'
+    ]),
+    ...mapGetters('init', [
       'statusMap'
     ]),
     createdAt () {
-      return dateFormat(this.form.createdAt, 'yyyy-MM-dd hh:mm:ss')
+      return dateFormat(this.userForm.createdAt, 'yyyy-MM-dd hh:mm:ss')
     },
     updatedAt () {
-      return dateFormat(this.form.updatedAt, 'yyyy-MM-dd hh:mm:ss')
+      return dateFormat(this.userForm.updatedAt, 'yyyy-MM-dd hh:mm:ss')
     }
   },
   methods: {
     getRoleList () {
-      this.$store.dispatch('getRoleList', {})
+      this.$store.dispatch('role/getRoleList', {})
     },
     getUserDetail () {
-      this.$store.dispatch('getUserDetail', {
+      this.$store.dispatch('user/getUserDetail', {
         id: this.userId
       }).then(ret => {
-        this.form = ret
-        for (let i in this.form) {
-          this.initString += this.form[i]
+        this.userForm = ret
+        for (let i in this.userForm) {
+          this.initString += this.userForm[i]
         }
       })
     },
     saveEdit () {
       let str = ''
-      for (let i in this.form) {
-        str += this.form[i]
+      for (let i in this.userForm) {
+        str += this.userForm[i]
       }
 
       if (str === this.initString) {
@@ -134,10 +140,10 @@ export default {
       }
 
       return new Promise((resolve, reject) => {
-        this.$refs.form.validate(valid => {
+        this.$refs.userForm.validate(valid => {
           if (valid) {
-            this.form.id = this.userId
-            this.$store.dispatch('updateUser', this.form).then(() => {
+            this.userForm.id = this.userId
+            this.$store.dispatch('user/updateUser', this.userForm).then(() => {
               this.cancelAndBack()
             })
           }

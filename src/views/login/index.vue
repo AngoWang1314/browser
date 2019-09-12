@@ -117,7 +117,7 @@ export default {
     login () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$store.dispatch('login', this.form).then(() => {
+          this.$store.dispatch('user/login', this.form).then(() => {
             this.$router.push({ path: this.redirect || '/home' })
           })
         }
@@ -133,6 +133,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import '../../styles/less/variables.less';
 @import '../../styles/less/outside.less';
 .main {
   .logo {

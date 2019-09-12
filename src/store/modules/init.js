@@ -3,6 +3,7 @@ import router from '@/router'
 import asynRoutesMap from '@/router/asynRoutes'
 
 const init = {
+  namespaced: true,
   state: {
     sexes: [],
     authTypes: [],
@@ -15,6 +16,19 @@ const init = {
     user: {},
     asynRoutes: [],
     routes: []
+  },
+  getters: {
+    user: state => state.user,
+    asynRoutes: state => state.asynRoutes,
+    routes: state => state.routes,
+    sexes: state => state.sexes,
+    sexMap: state => state.sexMap,
+    authTypes: state => state.authTypes,
+    authTypeMap: state => state.authTypeMap,
+    displayModes: state => state.displayModes,
+    displayModeMap: state => state.displayModeMap,
+    status: state => state.status,
+    statusMap: state => state.statusMap
   },
   mutations: {
     SET_INIT_DATA (state, initData) {

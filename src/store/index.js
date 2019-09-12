@@ -1,6 +1,5 @@
 import vue from 'vue'
 import vuex from 'vuex'
-import getters from '@/store/getters'
 
 vue.use(vuex)
 
@@ -30,8 +29,7 @@ requireFilter.keys().forEach(fileName => {
 })
 
 const store = new vuex.Store({
-  modules: modules,
-  getters: getters
+  modules: modules
 })
 
 export default store

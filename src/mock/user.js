@@ -53,7 +53,8 @@ const userDetail = function () {
     ],
     username: Random.cname(),
     createdAt: (new Date()).getTime() - 3 * 24 * 60 * 60 * 1000,
-    updatedAt: (new Date()).getTime()
+    updatedAt: (new Date()).getTime(),
+    roleIds: []
   })
   return data
 }

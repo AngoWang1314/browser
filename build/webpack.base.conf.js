@@ -35,7 +35,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {
@@ -56,7 +56,7 @@ module.exports = {
         loader: 'url-loader',
         exclude: [resolve('src/icons')],
         options: {
-          limit: 10000,
+          limit: 5000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },
@@ -81,12 +81,12 @@ module.exports = {
         loader: 'svg-sprite-loader',
         include: [resolve('src/icons')],
         options: {
-         symbolId: 'icon-[name]'
+          symbolId: 'icon-[name]'
         }
       },
       {
         test: /\.less$/,
-        loader: "style-loader!css-loader!less-loader"
+        loader: 'style-loader!css-loader!less-loader'
       }
     ]
   },

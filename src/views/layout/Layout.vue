@@ -6,7 +6,10 @@
     </el-aside>
     <el-main>
       <head-bar></head-bar>
-      <router-view/>
+      <keep-alive :exclude="excludeComponents">
+          <router-view v-if="$route.meta.keepAlive"/>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"/>
     </el-main>
   </el-container>
 </template>
@@ -26,12 +29,13 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('base', [
       'isCollapseMenu'
-    ])
+    ]),
+    ...mapGetters('keepAlive', ['excludeComponents'])
   },
   created () {
-    this.$store.dispatch('getParentAuth')
+    this.$store.dispatch('auth/getParentAuth')
   }
 }
 </script>

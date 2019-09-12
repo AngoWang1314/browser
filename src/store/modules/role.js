@@ -1,8 +1,13 @@
 import { createRole, getRoleList, deleteRole, getRoleDetail, updateRole, getRoleAuth, configAuth } from '@/api/role'
 const role = {
+  namespaced: true,
   state: {
     roleList: [],
     roleTotalCount: 0
+  },
+  getters: {
+    roleList: state => state.roleList,
+    roleTotalCount: state => state.roleTotalCount
   },
   mutations: {
     SET_ROLE_LIST (state, result) {

@@ -1,10 +1,17 @@
 import { getAuthList, getParentAuth, createAuth, deleteAuth, getDetail, saveEditAuth, getAllAuth } from '@/api/auth'
 const auth = {
+  namespaced: true,
   state: {
     authList: [],
     authTotalCount: 0,
     parentAuths: [],
     parentAuthMap: {}
+  },
+  getters: {
+    authList: state => state.authList,
+    authTotalCount: state => state.authTotalCount,
+    parentAuths: state => state.parentAuths,
+    parentAuthMap: state => state.parentAuthMap
   },
   mutations: {
     SET_AUTH_LIST (state, result) {

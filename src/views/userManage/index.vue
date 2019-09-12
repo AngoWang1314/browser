@@ -100,19 +100,23 @@ export default {
     this.getUserList()
   },
   computed: {
-    ...mapGetters([
-      'roleList',
-      'userList',
-      'userTotalCount',
+    ...mapGetters('init', [
       'statusMap'
+    ]),
+    ...mapGetters('role', [
+      'roleList'
+    ]),
+    ...mapGetters('user', [
+      'userList',
+      'userTotalCount'
     ])
   },
   methods: {
     getRoleList () {
-      return this.$store.dispatch('getRoleList', {})
+      return this.$store.dispatch('role/getRoleList', {})
     },
     getUserList () {
-      this.$store.dispatch('getUserList', {
+      this.$store.dispatch('user/getUserList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.username
@@ -139,7 +143,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('prohibiteUser', {
+        this.$store.dispatch('user/prohibiteUser', {
           id: userId
         }).then(() => {
           this.search()
@@ -161,7 +165,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('unusableUser', {
+        this.$store.dispatch('user/unusableUser', {
           id: userId
         }).then(() => {
           this.search()
@@ -183,7 +187,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('normalUser', {
+        this.$store.dispatch('user/normalUser', {
           id: userId
         }).then(() => {
           this.search()
@@ -205,7 +209,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('resetPwd', {
+        this.$store.dispatch('user/resetPwd', {
           id: userId
         }).then(() => {
           this.search()

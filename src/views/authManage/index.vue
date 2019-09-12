@@ -78,23 +78,25 @@ export default {
     this.getInitData()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('init', [
       'authTypes',
-      'authTypeMap',
+      'authTypeMap'
+    ]),
+    ...mapGetters('auth', [
       'authList',
       'authTotalCount'
     ])
   },
   methods: {
     getInitData () {
-      this.$store.dispatch('getAuthList', {
+      this.$store.dispatch('auth/getAuthList', {
         perPage: this.pageSize,
         page: this.currentPage
       })
     },
     search () {
       this.isSearching = true
-      this.$store.dispatch('getAuthList', {
+      this.$store.dispatch('auth/getAuthList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.auth
@@ -121,7 +123,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('deleteAuth', {
+        this.$store.dispatch('auth/deleteAuth', {
           id: authId
         }).then(() => {
           this.search()

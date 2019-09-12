@@ -77,7 +77,7 @@ export default {
     this.getRoleList()
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('role', [
       'roleList',
       'roleTotalCount'
     ])
@@ -88,7 +88,7 @@ export default {
       this.getRoleList()
     },
     getRoleList () {
-      this.$store.dispatch('getRoleList', {
+      this.$store.dispatch('role/getRoleList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.rolename
@@ -113,7 +113,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('deleteRole', {
+        this.$store.dispatch('role/deleteRole', {
           id: roleId
         }).then(() => {
           this.search()
