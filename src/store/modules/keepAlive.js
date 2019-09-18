@@ -11,9 +11,13 @@ export default {
       // components 可能是组件name字符串或者数组
       let excludeComponents = state.excludeComponents
       if (Array.isArray(components)) {
-        state.excludeComponents = [...new Set([...excludeComponents, ...components])]
+        state.excludeComponents = [
+          ...new Set([...excludeComponents, ...components])
+        ]
       } else {
-        state.excludeComponents = [...new Set([...excludeComponents, components])]
+        state.excludeComponents = [
+          ...new Set([...excludeComponents, components])
+        ]
       }
     },
     DEL_EXCLUDE_COMPONENT (state, components) {

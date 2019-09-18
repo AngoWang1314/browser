@@ -70,6 +70,7 @@ export default {
     }
     return {
       code: '',
+      redirect: '',
       codeConfig: {
         width: 98,
         height: 40
@@ -101,23 +102,17 @@ export default {
       }
     }
   },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
+  created () {
+    this.redirect = this.$route.query && this.$route.query.redirect
   },
   methods: {
     codeChange (val) {
-      console.log(`验证码：${val}`)
       this.code = val
     },
     login () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$store.dispatch('user/login', this.form).then(() => {
+          this.$store.dispatch('login/login', this.form).then(() => {
             this.$router.push({ path: this.redirect || '/home' })
           })
         }
@@ -133,56 +128,56 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../../styles/less/variables.less';
-@import '../../styles/less/outside.less';
-.main {
-  .logo {
-    position: absolute;
-    top: -71px;
-    left: 50%;
-    margin-left: -71px;
-    width: 142px;
-    height: 142px;
-    border-radius: 50%;
-    z-index: 2;
-    overflow: hidden;
-  }
-  .validate-code {
-    width: 100px;
-    height: 38px;
-    cursor: pointer;
-    img {
-      width: 100%;
-      height: 100%;
+  @import '../../styles/less/variables.less';
+  @import '../../styles/less/outside.less';
+  .main {
+    .logo {
+      position: absolute;
+      top: -71px;
+      left: 50%;
+      margin-left: -71px;
+      width: 142px;
+      height: 142px;
+      border-radius: 50%;
+      z-index: 2;
+      overflow: hidden;
     }
-  }
-  .forget-pwd {
-    float: right;
-    color: #606266;
-    cursor: pointer;
-    &:hover {
-      color: #0079FE;
-      text-decoration: underline;
-    }
-  }
-
-  .register {
-    margin-top: 10px;
-    height: 20px;
-    line-height: 20px;
-    color: #999;
-    text-align: center;
-    span {
-      display: inline-block;
-      padding: 0 5px;
+    .validate-code {
+      width: 100px;
+      height: 38px;
       cursor: pointer;
-      color: @mainColor;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .forget-pwd {
+      float: right;
+      color: #606266;
+      cursor: pointer;
       &:hover {
+        color: #0079FE;
         text-decoration: underline;
       }
     }
+
+    .register {
+      margin-top: 10px;
+      height: 20px;
+      line-height: 20px;
+      color: #999;
+      text-align: center;
+      span {
+        display: inline-block;
+        padding: 0 5px;
+        cursor: pointer;
+        color: @mainColor;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
-}
 </style>
 <style>
   .el-input-group__prepend {

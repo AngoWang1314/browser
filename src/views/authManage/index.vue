@@ -11,44 +11,47 @@
       <div class="item-input">
         <el-button type="primary" icon="el-icon-search" :loading="isSearching" @click="search()">搜索</el-button>
       </div>
-      <el-button class="fr" type="primary" icon="el-icon-plus" @click="createAuth()">新建权限</el-button>
+      <el-button
+        class="fr"
+        type="primary"
+        icon="el-icon-plus"
+        v-permission="'system:authManage:create'"
+        @click="createAuth()">新建权限</el-button>
     </div>
     <div class="result-list">
       <el-table
-        :data="authList"
+        :data="list"
         stripe
         style="width: 100%"
         size="small">
         <el-table-column
           prop="name"
-          label="权限名称"
-          width="120">
+          label="权限名称">
         </el-table-column>
         <el-table-column
-          prop="authType"
-          label="权限类型"
-          width="120">
-          <template slot-scope="scope">
-            <el-tag size="medium">{{authTypeMap[scope.row.authType]}}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="location"
-          label="请求地址">
+          prop="authSign"
+          label="权限标识">
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="备注"
-          width="300">
+          label="备注">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="getDetail(scope.row.id)">查看详情</el-button>
-            <el-button type="text" size="small" @click="editAuth(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteAuth(scope.row.id)">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-permission="'system:authManage:detail'"
+              @click="getDetail(scope.row.id)">查看详情</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-permission="'system:authManage:edit'"
+              @click="updateAuth(scope.row.id)">编辑</el-button>
+            <!-- <el-button type="text" size="small" @click="deleteAuth(scope.row.id)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -58,7 +61,7 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         layout="total, prev, pager, next, jumper"
-        :total="authTotalCount">
+        :total="totalCount">
       </el-pagination>
     </div>
   </div>
@@ -83,20 +86,20 @@ export default {
       'authTypeMap'
     ]),
     ...mapGetters('auth', [
-      'authList',
-      'authTotalCount'
+      'list',
+      'totalCount'
     ])
   },
   methods: {
     getInitData () {
-      this.$store.dispatch('auth/getAuthList', {
+      this.$store.dispatch('auth/getList', {
         perPage: this.pageSize,
         page: this.currentPage
       })
     },
     search () {
       this.isSearching = true
-      this.$store.dispatch('auth/getAuthList', {
+      this.$store.dispatch('auth/getList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.auth
@@ -114,7 +117,7 @@ export default {
     getDetail (authId) {
       this.$router.push({path: '/authManage/detail/' + authId})
     },
-    editAuth (authId) {
+    updateAuth (authId) {
       this.$router.push({path: '/authManage/edit/' + authId})
     },
     deleteAuth (authId) {

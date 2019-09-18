@@ -20,7 +20,7 @@ const base = {
         background: 'rgba(0, 0, 0, 0.7)'
       }
 
-      options = {...options, ...defaultOptions}
+      options = { ...options, ...defaultOptions }
 
       // 全屏 Loading 不会创建多个实例
       options.fullscreen = true

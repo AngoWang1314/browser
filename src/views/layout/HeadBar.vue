@@ -64,7 +64,7 @@ export default {
       this.$i18n.locale = this.language
     },
     logout () {
-      this.$store.dispatch('user/logout').then(() => {
+      this.$store.dispatch('login/logout').then(() => {
         this.$router.push({name: 'login'})
       })
     }

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import store from '@/store'
 import LoadData from '@/views/loadData/index'
 import { quickSort } from '@/utils/utils'
-import { getToken } from '@/utils/token'
+import { Message } from 'element-ui'
 
 Vue.use(Router)
 
@@ -25,34 +25,42 @@ requireFilter.keys().forEach(fileName => {
   routes.push(filterConfig.default || filterConfig)
 })
 
+routes = quickSort(routes)
+
+store.dispatch('init/setRoutes', routes)
+
 const router = new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
+      name: 'Root',
       redirect: '/home/index',
-      hidden: true,
-      sort: 0
+      visible: true,
+      sort: 0 // 0 表示无需排序
     },
     {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: resolve => require(['@/views/login/index.vue'], resolve),
-      hidden: true
+      visible: true,
+      sort: 0
     },
     {
       path: '/findPwd',
-      name: 'findPwd',
+      name: 'FindPwd',
       component: resolve => require(['@/views/findPwd/index.vue'], resolve),
-      hidden: true
+      visible: true,
+      sort: 0
     },
     {
       path: '/register',
-      name: 'register',
+      name: 'Register',
       component: resolve => require(['@/views/register/index.vue'], resolve),
-      hidden: true
+      visible: true,
+      sort: 0
     },
-    ...quickSort(routes),
+    ...routes,
     {
       path: '/load-data',
       name: 'LoadData',
@@ -60,13 +68,13 @@ const router = new Router({
         text: '加载公共数据中'
       },
       component: LoadData,
-      hidden: true,
+      visible: true,
       sort: 0
     },
     {
       path: '*',
-      redirect: '/home/index',
-      hidden: true,
+      redirect: '/',
+      visible: true,
       sort: 0
     }
   ],
@@ -79,29 +87,13 @@ const router = new Router({
   }
 })
 
-// 白名单：无需合法token可进入
-const whiteList = ['/login', '/register', '/findPwd']
-function hasPermission (to) {
-  let arr = []
-  store.getters['init/routes'].forEach(item => {
-    item.name && (arr.push(item.name))
-    if (item.children) {
-      item.children.forEach(child => {
-        child.name && (arr.push(child.name))
-      })
-    }
-  })
-  return arr.some(item => item === to.name)
-}
 /*
   - 是否存在token
     - 是
       - 路由指向登录页 next(`/home/index`)
-      - 是否已获取路由表
+      - 是否已获取公用初始数据
         - 是
-          - 获取路由表
-            - 成功 next()
-            - 失败 next(`/login`)
+          - 成功 next()
         - 否
           - 判断路由是否在路由表(静态路由+动态路由)当中
             - 是 next()
@@ -111,37 +103,48 @@ function hasPermission (to) {
         - 是 next()
         - 否 next(`/login`)
 */
-router.beforeEach((to, from, next) => {
-  let path = to.path
-  if (getToken()) {
-    if (path === '/Login') {
-      next(`/home`)
+router.beforeEach(async (to, from, next) => {
+  to.meta.text && (document.title = to.meta.text)
+
+  if (store.getters['login/token']) {
+    console.log('has token')
+    if (to.name === 'Login') {
+      console.log('to login ==> to root')
+      next({name: 'Root'})
       return
     }
-    if (!store.getters['init/user'].name) {
-      store.dispatch('init/getInitData').then(function () {
-        router.addRoutes(store.getters['init/asynRoutes'])
-        next({...to, replace: true})
-      }).catch(() => {
-        // token过期
-        store.dispatch('user/logout').then(function () {
-          next(`/login`)
-        })
-      })
-    } else {
-      if (hasPermission(to)) {
-        next()
-      } else {
-        console.log(from)
-        if (from) {
-          next({path: from.path})
-        } else {
-          next(`/login`)
-        }
+
+    const { permission } = to.meta
+    if (permission) {
+      console.log('need permission')
+      const permissionList = store.getters['login/permissionList']
+      if (permissionList && permissionList.indexOf(permission) === -1) {
+        console.log('unauthorized')
+        Message.error('无权限访问此页面，请重新登录')
+        await store.dispatch('login/logout')
+        next({name: 'Login'})
       }
     }
+
+    let noInitData = !store.getters['init/user'].name
+    let whiteList = ['LoadData']
+    if (whiteList.indexOf(to.name) === -1 && noInitData) {
+      console.log('no init data')
+      next({name: 'LoadData'})
+    } else {
+      console.log('no problem')
+      next()
+    }
   } else {
-    (whiteList.indexOf(to.path) !== -1) ? next() : next(`/login?redirect=${to.path}`)
+    let whiteList = ['Login', 'Register', 'FindPwd']
+
+    if (whiteList.indexOf(to.name) > -1) {
+      console.log('login register findpwd')
+      next()
+    } else {
+      console.log('not whitelist ==> login')
+      next({name: 'Login', query: {redirect: to.path}})
+    }
   }
 })
 export default router

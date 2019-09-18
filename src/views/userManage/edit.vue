@@ -101,9 +101,9 @@ export default {
     this.getUserDetail()
   },
   computed: {
-    ...mapGetters('role', [
-      'roleList'
-    ]),
+    ...mapGetters('role', {
+      roleList: 'list'
+    }),
     ...mapGetters('init', [
       'statusMap'
     ]),
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     getRoleList () {
-      this.$store.dispatch('role/getRoleList', {})
+      this.$store.dispatch('role/getList', {})
     },
     getUserDetail () {
       this.$store.dispatch('user/getUserDetail', {

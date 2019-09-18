@@ -15,17 +15,17 @@ import 'normalize.css/normalize.css'
 import '@/styles/tool.css'
 import '@/styles/iconfont/iconfont.css'
 
-// 全局注册
-import '@/utils/golbalRegister'
-
-// svg
-import '@/icons/index'
-
 import App from '@/App'
 import router from '@/router'
 
+// 全局注册
+import '@/utils/golbalRegister'
+
 // import vuex
 import store from '@/store'
+
+// svg
+import '@/icons/index'
 
 Vue.use(VueI18n)
 Vue.config.productionTip = false

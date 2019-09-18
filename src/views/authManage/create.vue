@@ -4,45 +4,21 @@
       <div class="title">新建权限</div>
       <div class="form">
         <el-form ref="form" :model="form" label-width="120px" label-position="left" size="small">
-          <el-form-item label="权限名称">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
           <el-form-item label="父层权限名称">
             <el-select v-model="form.parentId" placeholder="请选择">
               <el-option
-                v-for="item in parentAuths"
+                v-for="item in allAuth"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="权限类型">
-            <el-radio-group v-model="form.authType">
-              <el-radio-button :label="item.id" :disabled="!item.isUsed" v-for="(item, index) in authTypes" :key="index">{{ item.name }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="请求地址">
-            <el-input v-model="form.location"></el-input>
+          <el-form-item label="权限名称">
+            <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="权限标识">
             <el-input v-model="form.authSign"></el-input>
-          </el-form-item>
-          <el-form-item label="连接目标">
-            <el-select v-model="form.displayMode" placeholder="请选择">
-              <el-option
-                v-for="item in displayModes"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="可见状态">
-              <el-radio-group v-model="form.isDisplay">
-                <el-radio-button label="true">可见</el-radio-button>
-                <el-radio-button label="false">不可见</el-radio-button>
-              </el-radio-group>
           </el-form-item>
           <el-form-item label="备注">
             <el-input
@@ -64,38 +40,27 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
       form: {
-        name: '',
-        authType: 'menu',
         parentId: '',
-        location: '',
+        name: '',
         authSign: '',
-        displayMode: '',
-        isDisplay: true
+        remark: ''
       }
     }
   },
-  created () {
-    // this.getInitData()
-  },
   computed: {
-    ...mapGetters('init', [
-      'authTypes',
-      'displayModes'
-    ]),
-    ...mapGetters('auth', [
-      'parentAuths'
-    ])
+    ...mapGetters('auth', ['allAuth'])
+  },
+  created () {
+    this.getAllAuth()
   },
   methods: {
-    // getInitData () {
-    //   this.$store.dispatch('init/getInitData')
-    //   this.$store.dispatch('auth/getParentAuth')
-    // },
+    ...mapActions('auth', ['getAllAuth']),
     createAuth () {
       this.$store.dispatch('auth/createAuth', this.form).then(rs => {
         this.$router.push({path: '/authManage/index'})

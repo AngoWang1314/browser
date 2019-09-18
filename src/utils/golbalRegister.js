@@ -1,9 +1,6 @@
 import Vue from 'vue'
-import lodash from 'lodash'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
-
-Vue.prototype._ = lodash
 
 /*
     --------------
@@ -46,32 +43,32 @@ requireComponent.keys().forEach(fileName => {
     全局注册指令
     --------------
  */
-// const requireDirective = require.context(
-//   // 指令目录
-//   '@/directives',
-//   // 不查找子目录
-//   false,
-//   // js文件
-//   /.+\.js$/
-// )
+const requireDirective = require.context(
+  // 指令目录
+  '@/directives',
+  // 不查找子目录
+  false,
+  // js文件
+  /.+\.js$/
+)
 
 // 对每个配匹的文件
-// requireDirective.keys().forEach(fileName => {
-//   // 请求指令模块
-//   const directiveConfig = requireDirective(fileName)
+requireDirective.keys().forEach(fileName => {
+  // 请求指令模块
+  const directiveConfig = requireDirective(fileName)
 
-//   // 获取组件的 PascalCase 命名
-//   const directiveName = fileName
-//     // 移除开始的 './'
-//     .replace(/^\.\//, '')
-//     // 移除文件扩展
-//     .replace(/\.\w+$/, '')
-//   // 注册指令, 文件名作为指令名
-//   Vue.directive(
-//     directiveName,
-//     directiveConfig.default || directiveConfig
-//   )
-// })
+  // 获取组件的 PascalCase 命名
+  const directiveName = fileName
+    // 移除开始的 './'
+    .replace(/^\.\//, '')
+    // 移除文件扩展
+    .replace(/\.\w+$/, '')
+  // 注册指令, 文件名作为指令名
+  Vue.directive(
+    directiveName,
+    directiveConfig.default || directiveConfig
+  )
+})
 
 /*
     --------------

@@ -14,13 +14,6 @@ export function getAllAuth () {
   })
 }
 
-export function getParentAuth () {
-  return request({
-    url: '/v1/auth/parentAuth',
-    method: 'get'
-  })
-}
-
 export function createAuth (params) {
   return request({
     url: '/v1/auth/create',

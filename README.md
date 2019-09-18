@@ -1,3 +1,7 @@
+# npm installation
+
+由于安装 pathoform 经常失败，所以加了这个下载命令
+
 # vue-backstage
 
 > 基于vue的后台项目，涉及技术栈：vuex vue-router elementUI axios mockjs等
@@ -194,14 +198,6 @@ npm i vue-i18n
 
 
 
-3. `router/asynRouters`定义异步路由列表
-
-   ```javascript
-   // router/index.js中添加添加异步路由
-   router.addRoutes(store.getters['init/asynRoutes'])
-   ```
-
-
 
 ### 数据模拟&API接入
 
@@ -287,15 +283,15 @@ new Vue({
 ```
 const auth = {
     state: {
-        authList: []
+        list: []
     },
     mutations: {
         SET_AUTH_LIST (state, responese) {
-            state.authList = responese.rows
+            state.list = responese.rows
         }
     },
     actions: {
-        getAuthList ({commit}, params) {
+        getList ({commit}, params) {
             // 异步请求得到response
             commit('SET_AUTH_LIST', response)
         }
@@ -303,3 +299,72 @@ const auth = {
 }
 ```
 
+
+
+# 权限管理
+
+分权限，角色，用户三个模块。权限有父子级关系，方便角色管理配置权限时区分各个页面的功能模块。角色可配置多个权限，用户可配置多个角色。菜单不考虑可定制化的情况，但是遇到有这种需求，可增加菜单管理模块来实现。
+
+# element ui 按需引入
+
+由于组件使用率不一，大多数情况下，在 main.js 里全部引入的方式是没必要的。而在每个页面单独引入的方式，虽然能保证最大限度减少包的大小，但是在繁琐。折中方案是，凡页面中用到的 elementUI 组件，都在 plugins 下的 element.js 中引入。
+
+# dll 加速打包进程
+
+在 webpack.dll.config.js 中配置了项目中常用的库，然后打包成 vender.js，后续打包过程就会略去以下的库，加速打包过程
+
+```
+  entry: {
+    // 定义程序中打包公共文件的入口文件vendor.js
+    vendor: ['vue', 'vuex', 'axios', 'vue-router']
+  }
+```
+
+
+# store 模块
+
+store 设 modules，分模块管理数据，每个模块都需设置 namespaced 为 true，使用时都需带上命名空间。
+```
+  computed: {
+    ...mapGetters('role', ['list'])
+  },
+  methods: {
+    ...mapActions('role', ['getList'])
+  }
+  this.list
+  this.getList(params)
+
+  // 或者
+  this.$store.getters['role/list']
+  this.$store.dispatch('role/getList', params)
+```
+
+
+# router 模块
+
+router 也设 modules，按菜单分多个文件管理路由，多人同时开发减少冲突，然后公用的路由集中放在 index.js 下管理。token，权限，公共数据的获取，都在路由守卫钩子里统一实现。三者优先级：token > 权限 > 公共数据获取。为获取 token，需先登录。登录完，meta 设置了 permission 的路由，进入前需要判断是否有权限。进入后，发现为获取公共数据，则会跳转到 LoadData 获取完数据在跳回原来的路由。
+
+
+
+# 页面中权限控制
+
+## v-permission
+```
+  <el-button
+    class="fr"
+    type="primary"
+    icon="el-icon-plus"
+    v-permission="'system:authManage:create'"
+    @click="createAuth()">新建权限</el-button>
+```
+
+## this.$permission
+
+```
+  {
+    hasPermission () {
+      // 通过方法 $permission 判断是否拥有权限
+      return this.$permission(['system:authManage:create'])
+    }
+  }
+```

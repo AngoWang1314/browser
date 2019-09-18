@@ -1,4 +1,4 @@
-const roleList = () => {
+const getRoleList = () => {
   return {
     rows: [
       {
@@ -21,7 +21,7 @@ const roleList = () => {
   }
 }
 
-const roleDetail = () => {
+const getRoleDetail = () => {
   let data = {
     createdAt: 1546998704524,
     createdBy: '-',
@@ -33,7 +33,7 @@ const roleDetail = () => {
   return data
 }
 
-const roleAuth = () => {
+const getRoleAuth = () => {
   return [
     {
       authId: '5c3da5d2671ac11a741d56b6',
@@ -81,7 +81,7 @@ const roleAuth = () => {
 }
 
 export default {
-  getRoleList: () => roleList(),
-  getRoleDetail: () => roleDetail(),
-  getRoleAuth: () => roleAuth()
+  getRoleList,
+  getRoleDetail,
+  getRoleAuth
 }

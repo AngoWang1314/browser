@@ -4,6 +4,7 @@ export default {
   path: '/home',
   redirect: '/home/index',
   component: Layout,
+  sort: 1,
   children: [
     {
       path: '/home/index',
@@ -13,6 +14,8 @@ export default {
   ],
   meta: {
     icon: 'home',
-    text: '主页'
+    text: '主页',
+    visible: true,
+    permission: 'system:home:view'
   }
 }

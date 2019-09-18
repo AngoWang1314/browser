@@ -137,7 +137,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.flag.isLogin = true
-          this.$store.dispatch('user/login', this.form).then(() => {
+          this.$store.dispatch('login/login', this.form).then(() => {
             this.$router.push({ path: '/home' })
           })
         }

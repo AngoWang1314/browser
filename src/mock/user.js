@@ -2,14 +2,8 @@ import Mock from 'mockjs'
 
 const Random = Mock.Random
 
-const userLogin = function () {
-  return {
-    token: Mock.Random.guid()
-  }
-}
-
 // 用户列表
-const userList = function () {
+const getUserList = () => {
   let data = {
     rows: [],
     totalCount: 10
@@ -36,7 +30,7 @@ const userList = function () {
   return data
 }
 
-const userDetail = function () {
+const getUserDetail = () => {
   let data = Mock.mock({
     email: Random.email(),
     id: Random.id(),
@@ -60,7 +54,6 @@ const userDetail = function () {
 }
 
 export default {
-  userLogin: () => userLogin(),
-  getUserList: () => userList(),
-  getUserDetail: () => userDetail()
+  getUserList,
+  getUserDetail
 }

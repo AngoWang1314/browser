@@ -33,9 +33,6 @@ export default {
       'isCollapseMenu'
     ]),
     ...mapGetters('keepAlive', ['excludeComponents'])
-  },
-  created () {
-    this.$store.dispatch('auth/getParentAuth')
   }
 }
 </script>

@@ -11,11 +11,16 @@
       <div class="item-input">
         <el-button type="primary" icon="el-icon-search" :loading="false" @click="search()">搜索</el-button>
       </div>
-      <el-button class="fr" type="primary" icon="el-icon-plus" @click="createRole()">新建角色</el-button>
+      <el-button
+        class="fr"
+        type="primary"
+        icon="el-icon-plus"
+        v-permission="'system:roleManage:create'"
+        @click="createRole()">新建角色</el-button>
     </div>
     <div class="result-list">
       <el-table
-        :data="roleList"
+        :data="list"
         stripe
         style="width: 100%"
         size="small">
@@ -46,9 +51,21 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editRole(scope.row.id)">编辑</el-button>
-            <el-button type="text" size="small" @click="configAuth(scope.row.id)">权限配置</el-button>
-            <el-button type="text" size="small" @click="deleteRole(scope.row.id)">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-permission="'system:roleManage:edit'"
+              @click="editRole(scope.row.id)">编辑</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-permission="'system:roleManage:authConfig'"
+              @click="configAuth(scope.row.id)">权限配置</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-permission="'system:roleManage:delete'"
+              @click="deleteRole(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,7 +74,7 @@
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           layout="total, prev, pager, next, jumper"
-          :total="roleTotalCount">
+          :total="totalCount">
         </el-pagination>
       </div>
     </div>
@@ -78,8 +95,8 @@ export default {
   },
   computed: {
     ...mapGetters('role', [
-      'roleList',
-      'roleTotalCount'
+      'list',
+      'totalCount'
     ])
   },
   methods: {
@@ -88,7 +105,7 @@ export default {
       this.getRoleList()
     },
     getRoleList () {
-      this.$store.dispatch('role/getRoleList', {
+      this.$store.dispatch('role/getList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.rolename

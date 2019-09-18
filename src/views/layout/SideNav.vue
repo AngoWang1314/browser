@@ -1,31 +1,16 @@
 <template>
   <transition name="slide-fade">
     <el-menu :default-active="defaultActiveRoute" class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapseMenu">
-      <router-link :to="router.link" v-for="(router, index) in _routes" v-bind:key="index">
-        <el-menu-item :index="router.link">
-          <svg-icon  :icon-class="router.icon"></svg-icon>
-          <span slot="title">{{ router.text }}</span>
+      <router-link
+        v-for="(router, index) in _routes"
+        :key="index"
+        :to="router.path"
+      >
+        <el-menu-item :index="router.path">
+          <svg-icon  :icon-class="router.meta.icon"></svg-icon>
+          <span slot="title">{{ router.meta.text }}</span>
         </el-menu-item>
       </router-link>
-    <!--
-      <router-link to="/userManage">
-        <el-menu-item index="2">
-          <svg-icon  icon-class="user-manage"></svg-icon>
-          <span slot="title">用户管理</span>
-        </el-menu-item>
-      </router-link>
-      <router-link to="/roleManage">
-        <el-menu-item index="3">
-          <svg-icon  icon-class="role-manage"></svg-icon>
-          <span slot="title">角色管理</span>
-        </el-menu-item>
-      </router-link>
-      <router-link to="/authManage">
-        <el-menu-item index="4">
-          <svg-icon  icon-class="function-manage"></svg-icon>
-          <span slot="title">权限管理</span>
-        </el-menu-item>
-      </router-link> -->
     </el-menu>
   </transition>
 </template>
@@ -36,30 +21,12 @@ export default {
     return {
       isCollapse: false,
       defaultActiveRoute: ''
-      // routers: [{
-      //   link: '/home/index',
-      //   icon: 'home',
-      //   text: '主页'
-      // }, {
-      //   link: '/userManage/index',
-      //   icon: 'user-manage',
-      //   text: '用户管理'
-      // }, {
-      //   link: '/roleManage/index',
-      //   icon: 'role-manage',
-      //   text: '角色管理'
-      // }, {
-      //   link: '/authManage/index',
-      //   icon: 'auth-manage',
-      //   text: '权限管理'
-      // }]
     }
   },
   watch: {
     $route: {
       handler: function (route) {
         this.defaultActiveRoute = route.matched[0].path
-        console.log(route)
       },
       immediate: true
     }
@@ -71,18 +38,16 @@ export default {
     ...mapGetters('init', [
       'routes'
     ]),
+    ...mapGetters('login', [
+      'permissionList'
+    ]),
     _routes () {
-      let arr = []
-      this.routes.forEach(router => {
-        if (!router.hidden) {
-          arr.push({
-            text: router.meta.text,
-            icon: router.meta.icon,
-            link: router.path
-          })
-        }
+      return this.routes.filter(item => {
+        // 可见的即为菜单
+        // meta 没带 permission 即不需控制
+        // meta 带 permission 则需判断
+        return item.meta.visible && (!item.meta.permission || this.permissionList.indexOf(item.meta.permission) > -1)
       })
-      return arr
     }
   },
   methods: {

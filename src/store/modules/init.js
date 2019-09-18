@@ -1,6 +1,4 @@
 import { getInitData } from '@/api/init'
-import router from '@/router'
-import asynRoutesMap from '@/router/asynRoutes'
 
 const init = {
   namespaced: true,
@@ -18,9 +16,8 @@ const init = {
     routes: []
   },
   getters: {
-    user: state => state.user,
-    asynRoutes: state => state.asynRoutes,
     routes: state => state.routes,
+    user: state => state.user,
     sexes: state => state.sexes,
     sexMap: state => state.sexMap,
     authTypes: state => state.authTypes,
@@ -32,14 +29,15 @@ const init = {
   },
   mutations: {
     SET_INIT_DATA (state, initData) {
-      const { userInfo, routes, sexes, authTypes, displayModes, status } = initData
+      const {
+        userInfo,
+        sexes,
+        authTypes,
+        displayModes,
+        status
+      } = initData
+
       state.user = userInfo
-      routes.forEach(item => {
-        state.asynRoutes.push(asynRoutesMap[item])
-      })
-
-      state.routes = router.options.routes.concat(state.asynRoutes)
-
       state.sexes = sexes
       state.authTypes = authTypes
       state.displayModes = displayModes
@@ -60,18 +58,26 @@ const init = {
       for (let i = 0; i < status.length; i++) {
         state.statusMap[status[i].id] = status[i].name
       }
+    },
+    SET_ROUTES (state, payload) {
+      state.routes = payload
     }
   },
   actions: {
-    getInitData ({commit}) {
+    getInitData ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInitData().then((response) => {
-          commit('SET_INIT_DATA', response)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        getInitData()
+          .then(response => {
+            commit('SET_INIT_DATA', response)
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
+    },
+    setRoutes ({ commit }, params) {
+      commit('SET_ROUTES', params)
     }
   }
 }

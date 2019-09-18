@@ -8,8 +8,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { setToken } from '@/utils/token'
-import { getQuery } from '@/utils/utils'
 
 export default {
   name: 'LoadData',
@@ -19,22 +17,14 @@ export default {
     }
   },
   created () {
-    this.initToken()
+    console.log('loaddata')
     this.getInitData().then(() => {
       this.fullscreenLoading = false
       this.$router.back()
     })
   },
   methods: {
-    ...mapActions('init', ['getInitData']),
-    initToken () {
-      let querys = getQuery()
-      let params = {
-        token_code: querys.token_code,
-        ref: querys.ref
-      }
-      setToken(JSON.stringify(params))
-    }
+    ...mapActions('init', ['getInitData'])
   }
 }
 </script>

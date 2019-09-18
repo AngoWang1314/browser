@@ -11,11 +11,16 @@
       <div class="item-input">
         <el-button type="primary" icon="el-icon-search" :loading="false" @click="search()">搜索</el-button>
       </div>
-      <el-button class="fr" type="primary" icon="el-icon-plus" @click="createUser()">新建用户</el-button>
+      <el-button
+        class="fr"
+        type="primary"
+        icon="el-icon-plus"
+        v-permission="'system:userManage:create'"
+        @click="createUser()">新建用户</el-button>
     </div>
     <div class="result-list">
       <el-table
-        :data="userList"
+        :data="list"
         stripe
         style="width: 100%"
         size="small">
@@ -40,7 +45,7 @@
           label="状态"
           width="150">
           <template slot-scope="scope">
-              <el-tag :type="typeMap[scope.row.status]" size="medium">{{ statusMap[scope.row.status] }}</el-tag>
+            <el-tag :type="typeMap[scope.row.status]" size="medium">{{ statusMap[scope.row.status] }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -52,11 +57,35 @@
           label="操作"
           width="220">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status == 'normal'" @click="editUser(scope.row.id)" type="text" size="small">编辑</el-button>
-            <el-button v-if="scope.row.status != 'prohibite'" type="text" size="small" @click="prohibiteUser(scope.row.id)">禁用</el-button>
-            <el-button v-if="scope.row.status == 'normal'" type="text" size="small" @click="unusableUser(scope.row.id)">停用</el-button>
-            <el-button v-if="scope.row.status != 'normal'" type="text" size="small" @click="normalUser(scope.row.id)">恢复正常</el-button>
-            <el-button v-if="scope.row.status == 'normal'" type="text" size="small" @click="resetPwd(scope.row.id)">重置密码</el-button>
+            <el-button
+              v-if="scope.row.status == 'normal'"
+              @click="editUser(scope.row.id)"
+              type="text"
+              v-permission="'system:userManage:edit'"
+              size="small">编辑</el-button>
+            <el-button
+              v-if="scope.row.status != 'prohibite'"
+              type="text"
+              size="small"
+              v-permission="'system:userManage:prohibite'"
+              @click="prohibiteUser(scope.row.id)">禁用</el-button>
+            <el-button
+              v-if="scope.row.status == 'normal'"
+              type="text"
+              size="small"
+              v-permission="'system:userManage:unusable'"
+              @click="unusableUser(scope.row.id)">停用</el-button>
+            <el-button
+              v-if="scope.row.status != 'normal'"
+              type="text"
+              size="small"
+              @click="normalUser(scope.row.id)">恢复正常</el-button>
+            <el-button
+              v-if="scope.row.status == 'normal'"
+              type="text"
+              size="small"
+              v-permission="'system:userManage:resetPwd'"
+              @click="resetPwd(scope.row.id)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,7 +94,7 @@
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           layout="total, prev, pager, next, jumper"
-          :total="400">
+          :total="totalCount">
         </el-pagination>
       </div>
     </div>
@@ -93,7 +122,7 @@ export default {
   },
   created () {
     this.getRoleList().then(() => {
-      this.roleList.map(item => {
+      this.roleList.forEach(item => {
         this.roleMap[item.id] = item.name
       })
     })
@@ -103,20 +132,20 @@ export default {
     ...mapGetters('init', [
       'statusMap'
     ]),
-    ...mapGetters('role', [
-      'roleList'
-    ]),
+    ...mapGetters('role', {
+      roleList: 'list'
+    }),
     ...mapGetters('user', [
-      'userList',
-      'userTotalCount'
+      'list',
+      'totalCount'
     ])
   },
   methods: {
     getRoleList () {
-      return this.$store.dispatch('role/getRoleList', {})
+      return this.$store.dispatch('role/getList', {})
     },
     getUserList () {
-      this.$store.dispatch('user/getUserList', {
+      this.$store.dispatch('user/getList', {
         perPage: this.pageSize,
         page: this.currentPage,
         keyword: this.username
@@ -124,6 +153,9 @@ export default {
     },
     search () {
       this.currentPage = 1
+      this.getUserList()
+    },
+    handleCurrentChange () {
       this.getUserList()
     },
     createUser () {
@@ -224,8 +256,7 @@ export default {
           message: '已取消重置'
         })
       })
-    },
-    handleCurrentChange () {}
+    }
   }
 }
 </script>

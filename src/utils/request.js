@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
-import { getToken } from '@/utils/token'
+import { getItem } from '@/utils/storage'
 import {
   baseUrl,
   serviceTimeout,
@@ -31,8 +31,9 @@ service.interceptors.request.use(
       })
     }
 
-    if (getToken()) {
-      config.headers['X-Token'] = getToken()
+    let token = getItem('token')
+    if (token) {
+      config.headers['X-Token'] = token
     }
 
     return config

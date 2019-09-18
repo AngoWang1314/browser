@@ -4,45 +4,21 @@
       <div class="title">编辑权限</div>
       <div class="form">
         <el-form ref="form" :model="form" label-width="120px" label-position="left" size="small">
+          <el-form-item label="父层权限名称">
+            <el-select v-model="form.parentId" placeholder="请选择">
+              <el-option
+                v-for="item in allAuth"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="权限名称">
             <el-input v-model="form.name" :disabled="true"></el-input>
           </el-form-item>
-          <el-form-item label="父层权限名称">
-            <el-select v-model="form.parentId" placeholder="请选择" :disabled="true">
-              <el-option
-                v-for="item in parentAuths"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="权限类型">
-            <el-radio-group v-model="form.authType">
-              <el-radio-button :label="item.id" :disabled="!item.isUsed" v-for="(item, index) in authTypes" :key="index">{{ item.name }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="请求地址">
-            <el-input v-model="form.location"></el-input>
-          </el-form-item>
           <el-form-item label="权限标识">
             <el-input v-model="form.authSign"></el-input>
-          </el-form-item>
-          <el-form-item label="连接目标">
-            <el-select v-model="form.displayMode" placeholder="请选择">
-              <el-option
-                v-for="item in displayModes"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="可见状态">
-              <el-radio-group v-model="form.isDisplay">
-                <el-radio-button label="true">可见</el-radio-button>
-                <el-radio-button label="false">不可见</el-radio-button>
-              </el-radio-group>
           </el-form-item>
           <el-form-item label="备注">
             <el-input
@@ -64,47 +40,39 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  props: ['authId'],
   data () {
     return {
-      form: {}
+      form: {
+        parentId: '',
+        name: '',
+        authSign: '',
+        remark: ''
+      }
     }
   },
-  created () {
-    this.getInitData()
-    this.authId = this.$route.params.authId
-    this.getDetail()
-  },
   computed: {
-    ...mapGetters('init', [
-      'authTypes',
-      'displayModes',
-      'parentAuths'
-    ]),
-    ...mapGetters('auth', [
-      'parentAuths'
-    ])
+    ...mapGetters('auth', ['allAuth'])
+  },
+  created () {
+    this.getAllAuth()
+    this.authDetail()
   },
   methods: {
-    getDetail () {
-      this.$store.dispatch('auth/getDetail', {
+    ...mapActions('auth', ['getAllAuth', 'getDetail', 'updateAuth']),
+    authDetail () {
+      this.getDetail({
         id: this.authId
       }).then((data) => {
         this.form = data
       })
     },
-    getInitData () {
-      if (!this.authTypes.length) {
-        this.$store.dispatch('init/getInitData')
-      }
-      if (!this.parentAuths.length) {
-        this.$store.dispatch('auth/getParentAuth')
-      }
-    },
     saveEdit () {
       this.form.id = this.authId
-      this.$store.dispatch('auth/saveEditAuth', this.form).then(rs => {
+      this.updateAuth(this.form).then(() => {
         this.$router.push({path: '/authManage/index'})
       })
     },

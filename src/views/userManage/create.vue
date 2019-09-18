@@ -103,13 +103,13 @@ export default {
     this.getRoleList()
   },
   computed: {
-    ...mapGetters('role', [
-      'roleList'
-    ])
+    ...mapGetters('role', {
+      roleList: 'list'
+    })
   },
   methods: {
     getRoleList () {
-      this.$store.dispatch('role/getRoleList', {})
+      this.$store.dispatch('role/getList', {})
     },
     createUser () {
       return new Promise((resolve, reject) => {
